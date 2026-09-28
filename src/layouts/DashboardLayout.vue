@@ -15,7 +15,7 @@ const pageTitle = computed(() => {
 </script>
 
 <template>
-  <div class="min-h-screen flex bg-light-bg dark:bg-dark-bg text-light-text-primary dark:text-dark-text-primary transition-colors">
+  <div class="h-screen w-full flex bg-light-bg dark:bg-dark-bg text-light-text-primary dark:text-dark-text-primary transition-colors overflow-hidden">
     <!-- Sidebar -->
     <AppSidebar
       v-model:collapsed="isSidebarCollapsed"
@@ -23,10 +23,11 @@ const pageTitle = computed(() => {
     />
 
     <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
       <!-- Top Navigation -->
       <AppTopNav
         :title="pageTitle"
+        class="shrink-0"
         @toggle-mobile-sidebar="isMobileSidebarOpen = !isMobileSidebarOpen"
       />
 

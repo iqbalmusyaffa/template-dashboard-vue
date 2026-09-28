@@ -44,7 +44,7 @@ function handleLogout() {
 </script>
 
 <template>
-  <header class="h-16 border-b border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 transition-colors select-none">
+  <header class="h-16 shrink-0 border-b border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 transition-colors select-none">
     <!-- Left Section: Mobile Toggle & Page Context -->
     <div class="flex items-center gap-3">
       <button

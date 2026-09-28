@@ -98,7 +98,7 @@ function handleLogout() {
   <!-- Sidebar Container -->
   <aside
     class="fixed top-0 bottom-0 left-0 z-40 flex flex-col border-r border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface transition-all duration-200 ease-in-out select-none
-           lg:static lg:translate-x-0"
+           lg:static lg:translate-x-0 h-full shrink-0"
     :class="[
       props.collapsed ? 'lg:w-[72px]' : 'lg:w-64',
       props.mobileOpen ? 'w-64 translate-x-0' : '-translate-x-full lg:translate-x-0'
