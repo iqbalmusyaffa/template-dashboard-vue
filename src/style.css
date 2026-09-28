@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg-primary: #f8fafc;
+    --color-surface-primary: #ffffff;
+    --color-surface-elevated: #f1f5f9;
+    --color-border: #e2e8f0;
+    --color-text-main: #0f172a;
+    --color-text-muted: #64748b;
+  }
+
+  .dark {
+    --color-bg-primary: #0f1115;
+    --color-surface-primary: #171a21;
+    --color-surface-elevated: #1e222b;
+    --color-border: #2a303b;
+    --color-text-main: #f1f5f9;
+    --color-text-muted: #94a3b8;
+  }
+
+  body {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.35);
+}
+
+/* PrimeVue Aura Theme refinements for Tailwind alignment */
+.p-datatable {
+  font-family: inherit !important;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-primary);
+  color: var(--color-text-main);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.p-datatable-header {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.p-datatable-thead > tr > th {
+  background-color: var(--color-surface-elevated) !important;
+  color: var(--color-text-muted) !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.p-datatable-tbody > tr {
+  background-color: transparent !important;
+  color: var(--color-text-main) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  font-size: 0.875rem !important;
+  transition: background-color 120ms ease;
+}
+
+.p-datatable-tbody > tr:hover {
+  background-color: rgba(99, 102, 241, 0.04) !important;
+}
+.dark .p-datatable-tbody > tr:hover {
+  background-color: rgba(99, 102, 241, 0.08) !important;
+}
+
+.p-paginator {
+  background: transparent !important;
+  border-top: 1px solid var(--color-border) !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 0.8125rem !important;
+}
