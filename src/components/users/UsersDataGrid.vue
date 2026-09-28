@@ -69,6 +69,8 @@ function getBadgeVariant(status: UserStatus) {
   }
 }
 
+import ExcelJS from 'exceljs';
+
 function exportToCsv() {
   if (dt.value) {
     dt.value.exportCSV();
@@ -93,6 +95,44 @@ function exportToCsv() {
     link.click();
     document.body.removeChild(link);
   }
+}
+
+async function exportToExcel() {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Enterprise Directory');
+
+  worksheet.columns = [
+    { header: 'ID', key: 'id', width: 14 },
+    { header: 'Name', key: 'name', width: 25 },
+    { header: 'Email', key: 'email', width: 30 },
+    { header: 'Role', key: 'role', width: 22 },
+    { header: 'Department', key: 'department', width: 24 },
+    { header: 'Status', key: 'status', width: 14 },
+    { header: 'Last Active', key: 'lastActive', width: 18 },
+    { header: 'Created Date', key: 'createdAt', width: 16 }
+  ];
+
+  props.users.forEach(u => {
+    worksheet.addRow({
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      role: u.role,
+      department: u.department,
+      status: u.status,
+      lastActive: u.lastActive,
+      createdAt: u.createdAt
+    });
+  });
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `nexus_users_${new Date().toISOString().split('T')[0]}.xlsx`;
+  link.click();
+  URL.revokeObjectURL(url);
 }
 </script>
 
@@ -148,17 +188,34 @@ function exportToCsv() {
           </div>
         </AppDropdown>
 
-        <!-- Export CSV Button -->
-        <AppButton
-          variant="secondary"
-          size="sm"
-          @click="exportToCsv"
-        >
-          <template #prefix>
-            <FileSpreadsheet class="w-3.5 h-3.5" />
+        <!-- Export Dropdown (Excel & CSV) -->
+        <AppDropdown align="right" width-class="w-40">
+          <template #trigger="{ isOpen }">
+            <AppButton variant="secondary" size="sm">
+              <template #prefix>
+                <FileSpreadsheet class="w-3.5 h-3.5" />
+              </template>
+              Export
+            </AppButton>
           </template>
-          Export CSV
-        </AppButton>
+
+          <div class="py-1 text-xs text-left">
+            <button
+              type="button"
+              class="w-full flex items-center gap-2 px-3 py-1.5 text-light-text-secondary hover:text-light-text-primary dark:text-dark-text-secondary dark:hover:text-dark-text-primary hover:bg-light-elevated dark:hover:bg-dark-elevated transition-colors"
+              @click="exportToExcel"
+            >
+              <FileSpreadsheet class="w-3.5 h-3.5 text-emerald-600" /> Excel (.xlsx)
+            </button>
+            <button
+              type="button"
+              class="w-full flex items-center gap-2 px-3 py-1.5 text-light-text-secondary hover:text-light-text-primary dark:text-dark-text-secondary dark:hover:text-dark-text-primary hover:bg-light-elevated dark:hover:bg-dark-elevated transition-colors"
+              @click="exportToCsv"
+            >
+              <FileSpreadsheet class="w-3.5 h-3.5 text-brand-600" /> CSV (.csv)
+            </button>
+          </div>
+        </AppDropdown>
 
         <!-- Refresh Button -->
         <AppButton

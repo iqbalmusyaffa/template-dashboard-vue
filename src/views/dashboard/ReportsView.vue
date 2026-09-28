@@ -8,11 +8,48 @@ import RevenueChart from '../../components/dashboard/RevenueChart.vue';
 import UserActivityChart from '../../components/dashboard/UserActivityChart.vue';
 import { Download, FileText, Calendar, CheckCircle2, TrendingUp, DollarSign, Database } from 'lucide-vue-next';
 
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { REVENUE_DATA } from '../../data/dummyData';
+import { formatCurrency } from '../../utils/formatters';
+
 const toast = useToastStore();
 const selectedPeriod = ref('Q3-2026');
 
 function triggerExport(format: string) {
-  toast.success('Report Generation Initiated', `Your ${selectedPeriod.value} ${format.toUpperCase()} report is being compiled and will download shortly.`);
+  if (format === 'pdf') {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text(`Nexus Enterprise Financial Report (${selectedPeriod.value})`, 14, 20);
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generated on ${new Date().toLocaleDateString()} | Confidential Executive Summary`, 14, 28);
+
+    autoTable(doc, {
+      startY: 35,
+      head: [['Period', 'Revenue (USD)', 'Expenses (USD)', 'Net Margin']],
+      body: REVENUE_DATA.map(r => [
+        r.period,
+        formatCurrency(r.revenue),
+        formatCurrency(r.expenses),
+        formatCurrency(r.margin || 0)
+      ]),
+      theme: 'striped',
+      headStyles: { fillColor: [79, 70, 229] }
+    });
+
+    doc.save(`nexus-financial-report-${selectedPeriod.value.toLowerCase()}.pdf`);
+    toast.success('PDF Downloaded', `Executive report for ${selectedPeriod.value} has been generated.`);
+  } else {
+    const headers = ['Period', 'Revenue', 'Expenses', 'Net Margin'];
+    const rows = REVENUE_DATA.map(r => [r.period, r.revenue, r.expenses, r.margin || 0]);
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const link = document.createElement('a');
+    link.href = encodeURI(csvContent);
+    link.download = `nexus-report-${selectedPeriod.value.toLowerCase()}.csv`;
+    link.click();
+    toast.success('CSV Exported', `Financial telemetry exported to CSV.`);
+  }
 }
 </script>
 

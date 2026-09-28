@@ -1,4 +1,8 @@
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import type { UserStatus } from '../types';
+
+dayjs.extend(relativeTime);
 
 export function formatCurrency(value: number): string {
   return new Intl.NumberFormat('en-US', {
@@ -12,17 +16,16 @@ export function formatNumber(value: number): string {
   return new Intl.NumberFormat('en-US').format(value);
 }
 
-export function formatDate(dateString: string): string {
-  try {
-    const d = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit'
-    }).format(d);
-  } catch {
-    return dateString;
-  }
+export function formatDate(dateString: string, format = 'MMM D, YYYY'): string {
+  if (!dateString) return '';
+  const d = dayjs(dateString);
+  return d.isValid() ? d.format(format) : dateString;
+}
+
+export function formatRelativeTime(dateString: string): string {
+  if (!dateString) return '';
+  const d = dayjs(dateString);
+  return d.isValid() ? d.fromNow() : dateString;
 }
 
 export function getStatusBadgeVariant(status: UserStatus): {
